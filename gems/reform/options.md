@@ -118,6 +118,22 @@ To filter values manually, you can override the setter in the form.
 
 Again, setters are only called in `validate`, *not* during construction.
 
+## Multiparameter Dates
+  
+Composed multi-parameter dates as created by the Rails date helper are processed automatically when `multi_params: true` is set for the date property and the `MultiParameterAttributes` feature is included. As soon as Reform detects an incoming `release_date(i1)` or the like it is gonna be converted into a date.
+ 
+```ruby
+class AlbumForm < Reform::Form
+  feature Reform::Form::MultiParameterAttributes
+
+  property :title
+  property :release_date, :multi_params => true
+  validates :title, :presence => true
+end
+```
+  
+Note that the date will be `nil` when one of the components (year/month/day) is missing.
+
 ## Deserializer
 
 A form object is just a twin. In `validate`, a representer is used to deserialize the incoming hash and populate the form twin graph. This means, you can use any representer you like and process data like JSON or XML, too.
